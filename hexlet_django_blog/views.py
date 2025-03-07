@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
+from django.shortcuts import redirect
 
 
 # def index(request):
@@ -19,4 +20,7 @@ class HomePageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['who'] = 'World'
         return context
+
+def my_view(request):
+    return redirect("articles", tags='python', article_id=42)
 

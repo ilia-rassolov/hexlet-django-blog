@@ -4,14 +4,15 @@ from django.views import View
 
 
 # def index(request):
-#     return render(request, 'index.html', context={
+#     return render(request, 'index.html',  context={
 #         'who': 'Article',
 #     })
 
 class IndexView(View):
 
-    template_name = "index.html"
-    context = {'who': 'Article', }
-
     def get(self, request, *args, **kwargs):
-        return HttpResponse()
+        return render(request, 'article/index.html',  context={
+        'tags': 'python',
+        'article_id': 42,
+        })
+
