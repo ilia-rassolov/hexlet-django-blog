@@ -5,7 +5,12 @@
     <title>Title</title>
 </head>
 <body>
-<h1>It' Articles/index/View</h1>
-<h1>Статья номер {{ article_id }}. Тег {{ tags }}</h1>
+{% block content %}
+    <h1>Список статей</h1>
+    {% for article in articles %}
+        <h2>{{ article.name }}</h2>
+        <div>{{ article.body|slice:":200" }}</div>
+    {% endfor %}
+{% endblock %}
 </body>
 </html>

@@ -1,5 +1,8 @@
 from django.shortcuts import render
+from django.db import models
 from django.http import HttpResponse
+
+from hexlet_django_blog.article.models import Article
 from django.views import View
 
 
@@ -11,8 +14,8 @@ from django.views import View
 class IndexView(View):
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'article/index.html',  context={
-        'tags': 'python',
-        'article_id': 42,
+        articles = Article.objects.all()[:15]
+        return render(request, 'article/index.html', context={
+            'articles': articles,
         })
 

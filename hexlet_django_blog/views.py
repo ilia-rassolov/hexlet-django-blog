@@ -21,6 +21,6 @@ class HomePageView(TemplateView):
         context['who'] = 'World'
         return context
 
-def my_view(request):
-    return redirect("articles", tags='python', article_id=42)
+# def my_view(request):
+#     return redirect("articles", tags='python', article_id=42)
 
