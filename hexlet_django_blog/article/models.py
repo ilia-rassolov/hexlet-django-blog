@@ -10,5 +10,8 @@ class Article(models.Model):
         return self.name
 
 
-class Comment(models.Model):
+class ArticleComment(models.Model):
+    content = models.CharField('content', max_length=100)
+
+class Comment:
     pass
