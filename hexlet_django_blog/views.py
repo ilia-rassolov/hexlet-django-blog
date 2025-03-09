@@ -22,5 +22,5 @@ class HomePageView(TemplateView):
         return context
 
 # def my_view(request):
-#     return redirect("articles", tags='python', article_id=42)
+#     return redirect("article", tags='python', article_id=42)
 
