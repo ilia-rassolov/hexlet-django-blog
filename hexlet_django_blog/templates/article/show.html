@@ -3,5 +3,11 @@
 {% block content %}
     <h1>{{ article.name }}</h1>
     <div>{{ article.body }}</div>
-    <a href="{% url 'comment_create' article.id %}">Add comment</a>
+    <form action="{% url 'comment_create' article.id %}" method="post">
+        {% csrf_token %}
+        <table border="1">
+           {{ form }}
+        </table>
+        <input type="submit" value="Добавить комментарий">
+    </form>
 {% endblock %}

@@ -1,12 +1,13 @@
 from django import forms # Импортируем формы Django
-from django.forms import ModelForm
 
-from hexlet_django_blog.article.models import ArticleComment
+from hexlet_django_blog.article.models import ArticleComment, Article
 
-class CommentArticleForm(forms.Form):
-    content = forms.CharField(label='Комментарий', max_length=200) # Текст комментария
-
-class ArticleCommentForm(ModelForm):
+class ArticleCommentForm(forms.ModelForm):
     class Meta:
         model = ArticleComment
-        fields = ['content']
+        fields = ['title', 'comment']
+
+class ArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ['name', 'body']

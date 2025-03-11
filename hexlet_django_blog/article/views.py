@@ -1,10 +1,9 @@
-from django.shortcuts import render, get_object_or_404
-from django.db import models
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.views import View
 
-from hexlet_django_blog.article.models import Article, Comment
-from hexlet_django_blog.article.forms import CommentArticleForm
+from hexlet_django_blog.article.models import Article
+from hexlet_django_blog.article.forms import ArticleCommentForm, ArticleForm
 
 
 # def index(request):
@@ -28,25 +27,46 @@ class ArticleView(View):
             'article': article,
         })
 
-
-# class ArticleCommentsView(View):
-#
-#     def get(self, request, *args, **kwargs):
-#         comment = get_object_or_404(Comment, id=kwargs['id'], article_id=kwargs['article_id'])
-#         return None
-
 class CommentArticleView(View):
-    # если метод POST, то мы обрабатываем данные
+
     def post(self, request, *args, **kwargs):
-        form = CommentArticleForm(request.POST) # Получаем данные формы из запроса
-        if form.is_valid(): # Проверяем данные формы на корректность
-            comment = Comment(name = form.cleaned_data['content'],) # Получаем очищенные данные из поля content
-            comment.save()                                          #  и создаем новый комментарий
+        form = ArticleCommentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('articles_index')
+        return render(request, 'article/show.html',
+                      {'form': form, })
 
-
-    # если метод GET, то создаем пустую форму
+        # если метод GET, то создаем пустую форму
     def get(self, request, *args, **kwargs):
+        article = get_object_or_404(Article, id=kwargs['id'])
+        form = ArticleCommentForm() # Создаем экземпляр нашей формы
+        return render(request, 'article/show.html',
+                      {'form': form, 'article': article,}) # Передаем нашу форму в контексте
 
-        form = CommentArticleForm() # Создаем экземпляр нашей формы
-        return render(request, 'comment.html', {'form': form}) # Передаем нашу форму в контексте
+class ArticleFormEditView(View):
 
+    def get(self, request, *args, **kwargs):
+        article_id = kwargs.get('id')
+        article = Article.objects.get(id=article_id)
+        form = ArticleForm(instance=article)
+        return render(request, 'article/update.html', {'form': form, 'article_id':article_id})
+
+    def post(self, request, *args, **kwargs):
+        article_id = kwargs.get('id')
+        article = Article.objects.get(id=article_id)
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            form.save()
+            return redirect('articles_index')
+
+        return render(request, 'article/update.html', {'form': form, 'article_id': article_id})
+
+class ArticleFormDeleteView(View):
+
+    def post(self, request, *args, **kwargs):
+        article_id = kwargs.get('id')
+        article = Article.objects.get(id=article_id)
+        if article:
+            article.delete()
+        return redirect('articles_index')

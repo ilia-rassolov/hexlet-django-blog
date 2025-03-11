@@ -9,9 +9,6 @@ class Article(models.Model):
     def __str__(self):
         return self.name
 
-
 class ArticleComment(models.Model):
-    content = models.CharField('content', max_length=100)
-
-class Comment:
-    pass
+    title = models.CharField('title', max_length=100)
+    comment = models.CharField('comment', max_length=100)
