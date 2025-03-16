@@ -1,0 +1,13 @@
+<div>
+    <a href="{% url 'product_list' %}"
+       {% if not current_category_id %}active{% endif %}>
+        Все категории
+    </a>
+
+    {% for category in categories %}
+        <a href="{% url 'product_by_category' category.id %}"
+           {% if current_category_id == category.id %}active{% endif %}>
+            {{ category.name }}
+        </a>
+    {% endfor %}
+</div>
