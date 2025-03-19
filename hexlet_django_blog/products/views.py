@@ -2,29 +2,31 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, ListView
 
-from .models import Category, Product
+from hexlet_django_blog.products.models import Category, Product
 
 
 # BEGIN (write your solution here)
 class ProductListView(ListView):
     model = Product
     template_name = 'products/product_list.html'
+    context_object_name = 'products'
 
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs):
         current_category_id = kwargs.get('category_id')
-        if current_category_id:
-            current_category = get_object_or_404(Category, id=current_category_id)
-            products = Product.objects.filter(category=current_category)
-        else:
-            products = Product.objects.all()
-        context = super().get_context_data(**kwargs)
         categories = Category.objects.all()
-        context['products'] = products
-        context['current_category_id'] = current_category_id
+        context = super().get_context_data(**kwargs)
         context['categories'] = categories
+        context['current_category_id'] = current_category_id
         return context
 
+    def get_queryset(self):
+        current_category = self.kwargs.get('category_id')
+        if current_category:
+            products = Product.objects.filter(category__id=current_category).select_related('category')
+        else:
+            products = Product.objects.all()
+        return products
 
 class ProductDetailView(DetailView):
     model = Product
